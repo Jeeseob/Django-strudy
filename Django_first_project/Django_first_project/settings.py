@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import security_var
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-g^63so$0utn-n$$w%&$qe(9rlg(1=v6&ji8ne0ad4!20_a-84t'
+SECRET_KEY = security_var.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # 이걸 False로 바꾸면 기본적으로 제공되는 화면이 나오지 않는다.
@@ -42,6 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # djangorestframewokr 설치함. 설치 후에 여기에 앱 명시해야함.
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -107,6 +110,18 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+
+
+# REST framework 앱 추가후 관련 세팅 코드 추가
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
+
 
 
 # Internationalization
