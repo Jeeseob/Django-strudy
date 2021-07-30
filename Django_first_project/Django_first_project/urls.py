@@ -25,6 +25,8 @@ urlpatterns = [
 
 
 # Serializers define the API representation.
+# 데이터를 json 형태로 바꿔주는 객체
+# User라는 모델안에 있는 필드 중 url, username, email, is_staff만을 사용해서 json형태로 바꾼다.
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
@@ -39,6 +41,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
+# users를 실행시키면 UserViewSet을 실행한다 라는 의미
 router.register(r'users', UserViewSet)
 
 # Wire up our API using automatic URL routing.

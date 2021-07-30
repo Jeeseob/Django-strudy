@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # djangorestframewokr 설치함. 설치 후에 여기에 앱 명시해야함.
     'rest_framework',
+    'addresses',
 ]
 
 MIDDLEWARE = [
