@@ -17,36 +17,14 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets
+from addresses import views
 
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls')),
-]
+# ..은 한단계 위의 디렉토리 즉 한단계 위의 디렉토리의 addresses폴더의 views에서 address_list를 가져온다는 의미
 
-
-# Serializers define the API representation.
-# 데이터를 json 형태로 바꿔주는 객체
-# User라는 모델안에 있는 필드 중 url, username, email, is_staff만을 사용해서 json형태로 바꾼다.
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = User
-        fields = ['url', 'username', 'email', 'is_staff']
-
-
-# ViewSets define the view behavior.
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
-
-# Routers provide an easy way of automatically determining the URL conf.
-router = routers.DefaultRouter()
-# users를 실행시키면 UserViewSet을 실행한다 라는 의미
-router.register(r'users', UserViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
-    path('', include(router.urls)),
+    path('addresses/', views.address_list), #addresses 앱에 있는 views의 address_list
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
