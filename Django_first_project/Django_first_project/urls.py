@@ -25,6 +25,7 @@ from addresses import views
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
-    path('addresses/', views.address_list), #addresses 앱에 있는 views의 address_list
+    path('addresses/', views.controlAddress_list), #addresses 앱에 있는 views의 address_list
+    path('addresses/<int:pk>/', views.controlAddress), #pk 값이 있으면 controlAddress로 가고 arg로 pk 값을 전달
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
