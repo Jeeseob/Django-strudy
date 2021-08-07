@@ -11,7 +11,7 @@ from .serializers import AddressesSerializer
 def controlAddress_list(request):
     if request.method == 'GET':
         query_set = Addresses.objects.all()
-        serializer = AddressesSerializer(query_set, many=True)  # many?
+        serializer = AddressesSerializer(query_set, many=True)  # many = True -> 데이터가 여러개라는 의미
         return JsonResponse(serializer.data, safe=False)  # safe??
 
     elif request.method == 'POST':
@@ -44,3 +44,24 @@ def controlAddress(request, pk):
     elif request.method == 'DELETE':
         address_object.delete()
         return HttpResponse(status=204)
+
+
+# login part
+
+@csrf_exempt
+def login(request):
+    if request.method == 'POST':
+        #jsonParser를 사용하여 request에 대한 json 파일을 가져온다.
+        data = JSONParser().parse(request)
+        # inputId = request.Post['name'](처음 시도했던 것) -> request 안에 method와 url 정보 밖에 없음
+        # inputId에 json의 name 값을 넣는다.
+        inputId = data['name']
+        # inputId를 key로 Addresses에서 row값을 가져온다.
+        userObject = Addresses.objects.get(name=inputId)
+        if data['phone_number'] == userObject.phone_number:
+            print('login success')
+            return HttpResponse(status=200)
+        else:
+            print('login failed')
+            return HttpResponse(status=400)
+

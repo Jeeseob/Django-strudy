@@ -27,5 +27,6 @@ from addresses import views
 urlpatterns = [
     path('addresses/', views.controlAddress_list), #addresses 앱에 있는 views의 address_list
     path('addresses/<int:pk>/', views.controlAddress), #pk 값이 있으면 controlAddress로 가고 arg로 pk 값을 전달
+    path('login/', views.login),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
