@@ -144,7 +144,8 @@ migrations/
 _media/
 
 security_var.py
-*.xslx
+
+*.xlsx
 
 
 
