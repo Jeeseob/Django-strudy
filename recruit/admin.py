@@ -15,7 +15,7 @@ class TagAdmin(admin.ModelAdmin):
 
 
 # admin.site.register(Post)
-admin.site.register(RecruitPost)
+# admin.site.register(RecruitPost)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(RecruitPost, MarkdownxModelAdmin)

@@ -53,7 +53,7 @@ class RecruitPost(models.Model):
     update_at = models.DateTimeField(auto_now=True)
 
     # post와 one to many relationship으로 연결 (
-    author = models.ForeignKey(User, null=True, on_delete=models.CASCADE())  # 유저가 삭제되면, post가 의미가 없어지기 때문에 cascade
+    author = models.ForeignKey(User, null=True, on_delete=models.CASCADE)  # 유저가 삭제되면, post가 의미가 없어지기 때문에 cascade
 
     # null, blank --> null은 DB 속성 중 null이 가능한지, blank는 request롤 입력시 빈칸이 가능한지.
     category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.SET_NULL)

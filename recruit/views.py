@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 # url패턴에서 실행하는 함수
-from recurit.models import RecruitPost, Category, Tag
+from recruit.models import RecruitPost, Category, Tag
 
 # 로그인 방문자 접근
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -17,7 +17,7 @@ class PostUpdate(LoginRequiredMixin, UpdateView):
     model = RecruitPost
     fields = ['title', 'hook_message', 'content', 'head_image', 'attached_file', 'category', 'tag']
 
-    template_name = "blog/post_form_update.html"
+    template_name = "recruit-post/post_form_update.html"
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated and request.user == self.get_object().author:
@@ -39,7 +39,7 @@ class PostCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView):
             form.instance.author = current_user
             return super(PostCreate, self).form_valid(form)
         else:
-            return redirect('/blog')
+            return redirect('/recruit-post')
 
 
 # class based views (CBV)
@@ -96,7 +96,7 @@ def show_tag_posts(request, slug):
     }
     return render(
         request,
-        'blog/post_list.html',
+        'recruit-post/post_list.html',
         context
     )
 

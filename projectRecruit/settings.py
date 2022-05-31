@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     ## 추가 앱
-    'recurit',
+    'recruit',
 
     ## 입력 폼
     'crispy_forms',
@@ -83,16 +83,16 @@ WSGI_APPLICATION = 'projectRecruit.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
-LOCAL_SQLITE = 'sqlite://' + os.path.abspath(os.path.join(BASE_DIR, 'db.sqlite3'))
-DATABASES = {}
-DATABASES['default'] = dj_database_url.config(default=LOCAL_SQLITE)
+# LOCAL_SQLITE = 'sqlite://' + os.path.abspath(os.path.join(BASE_DIR, 'db.sqlite3'))
+# DATABASES = {}
+# DATABASES['default'] = dj_database_url.config(default=LOCAL_SQLITE)
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
