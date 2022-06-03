@@ -142,10 +142,3 @@ migrations/
 
 # user uploadFile 제거
 _media/
-
-security_var.py
-
-*.xlsx
-
-
-
