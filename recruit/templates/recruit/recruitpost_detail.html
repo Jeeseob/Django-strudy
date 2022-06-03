@@ -1,0 +1,86 @@
+{% extends 'recruit/base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}
+<title>recruit - {{ recruitpost.title }}</title>
+{% endblock %}
+
+{% block main_area %}
+      <div class="col-lg-12">
+
+        <!-- Title -->
+        <h1 class="mt-4">{{ recruitpost.title }}</h1>
+
+        <!-- Author -->
+        <p class="lead">
+          by
+          <a href="#">{{ recruitpost.author }}</a>
+        </p>
+
+        <hr/>
+          {% if user.is_authenticated %}
+              {% if user == recruitpost.author %}
+                  <a class="btn btn-info btn-sm float-right" href="/recruit/update_post/{{ recruitpost.pk }}/" role="button">
+                      <i class="fas fa-pen"></i>
+                      &nbsp;&nbsp;Edit Post
+                  </a>
+              {% endif %}
+          {% endif %}
+
+        <!-- Date/Time -->
+        <p>Posted on {{ recruitpost.create_at }}</p>
+
+        <hr/>
+
+        <!-- Preview Image -->
+          {% if recruitpost.head_image %}
+              <img class="img-fluid rounded" src="{{ recruitpost.head_image.url }}" alt=""/>
+          {% endif %}
+
+        <hr/>
+
+        <!-- Post Content -->
+        <p>{{ recruitpost.get_content_markdown | safe }}</p>
+
+        <hr>
+          {% if recruitpost.tags.exists %}
+            <br/>
+            <i class="fas fa-tags"></i>
+            {% for tag in recruitpost.tags.iterator %}
+                <a href = {{ tag.get_absolute_url }}>{{ tag }}</a>
+            {% endfor %}
+            <br/>
+            <br/>
+            {% endif %}
+
+        <!-- Comments Form -->
+        <div class="card my-4">
+          <h5 class="card-header">Leave a Comment:</h5>
+          <div class="card-body">
+            <form method="post" action="{{ recruitpost.get_absolute_url }}/addcomment/">{% csrf_token %}
+              <div class="form-group">
+                  {{ comment_form | crispy }}
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+          </div>
+        </div>
+
+      {% if recruitpost.comment_set.exists %}
+        {% for comment in recruitpost.comment_set.iterator %}
+            <!-- Single Comment -->
+            <div class="media mb-4" id = "comment={{ comment.pk }}">
+    {#          <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">#}
+              <div class="media-body">
+                <h5 class="mt-0">
+                    {{ comment.author.username }} &nbsp; &nbsp;
+                    <small class="text-muted"> {{ comment.create_at }} </small>
+                </h5>
+                <p>{{ comment.content | linebreaks }}</p>
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
+
+      </div>
+
+{% endblock %}
