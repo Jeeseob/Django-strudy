@@ -1,0 +1,41 @@
+{% extends 'util/base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}
+<title>Join</title>
+{% endblock %}
+
+{% block main_area %}
+      <div class="col-lg-12">
+
+        <!-- Title -->
+        <h1 class="mt-4">{{ memberjoin.name }}</h1>
+
+        <!-- Author -->
+        <p class="lead">
+          by
+          <a href="#">{{ memberjoin.phone_number }}</a>
+        </p>
+
+        <hr/>
+          {% if user.is_authenticated %}
+              {% if user == recruitpost.author %}
+                  <a class="btn btn-info btn-sm float-right" href="/recruit/update_join/{{ memberjoin.pk }}/" role="button">
+                      <i class="fas fa-pen"></i>
+                      &nbsp;&nbsp;Edit Post
+                  </a>
+              {% endif %}
+          {% endif %}
+
+        <!-- Date/Time -->
+        <p>Posted on {{ memberjoin.create_at }}</p>
+
+        <hr/>
+        <hr/>
+
+        <!-- Post Content -->
+        <p>{{ memberjoin.get_content_markdown | safe }}</p>
+
+        <hr>
+      </div>
+
+{% endblock %}

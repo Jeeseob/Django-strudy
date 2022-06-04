@@ -1,4 +1,4 @@
-{% extends 'recruit/base.html' %}
+{% extends 'util/base.html' %}
 
 {% block title %}
 <title>Recruit</title>
@@ -19,6 +19,9 @@
         {% endif %}
         {% if tag %}
             with tag '{{ tag }}'
+        {% endif %}
+        {% if search %}
+            search '{{ search }}'
         {% endif %}
     </h1>
 

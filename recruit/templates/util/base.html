@@ -13,10 +13,10 @@
 <script>
     function search() {
         var text = document.getElementById("search").value;
-        location.href = "/recruit/tag/" + text;
+        location.href = "/recruit/search/" + text;
     }
 </script>
-    {% include 'recruit/navbar.html' %}
+    {% include 'util/navbar.html' %}
     <!-- Modal -->
     <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="logInModalLabel"
         aria-hidden="true">
@@ -92,7 +92,7 @@
         </div>
     </div>
 
-    {% include 'recruit/footer.html' %}
+    {% include 'util/footer.html' %}
 
 
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"

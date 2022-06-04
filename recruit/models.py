@@ -44,7 +44,7 @@ class RecruitPost(models.Model):
     numberOfMembers = models.IntegerField  # 모집중인 인원
     tempNumberOfMembers = models.IntegerField  # 현재 모집된 인원
 
-    dueDate = models.DateTimeField  # 마감일
+    due_date = models.DateField()  # 마감일
 
     head_image = models.ImageField(upload_to='recruit/images/%Y/%m/%d/', blank=True)
 
@@ -53,7 +53,7 @@ class RecruitPost(models.Model):
 
 
     # post와 one to many relationship으로 연결 (
-    author = models.ForeignKey(User, null=True, on_delete=models.CASCADE)  # 유저가 삭제되면, post가 의미가 없어지기 때문에 cascade
+    author = models.ForeignKey(User, null=False, on_delete=models.CASCADE)  # 유저가 삭제되면, post가 의미가 없어지기 때문에 cascade
 
     # null, blank --> null은 DB 속성 중 null이 가능한지, blank는 request롤 입력시 빈칸이 가능한지.
     category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.SET_NULL)
@@ -67,6 +67,23 @@ class RecruitPost(models.Model):
 
     def get_file_name(self):
         return os.path.basename(self.attached_file.name)
+
+    def get_content_markdown(self):
+        return markdown(self.content)
+
+
+class MemberJoin(models.Model):
+    name = models.CharField(max_length=10)  # 이름
+    phone_number = models.CharField(max_length=20)
+
+    content = MarkdownxField()
+    create_at = models.DateTimeField(auto_now=True)
+
+    author = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    recruit_post = models.ForeignKey(RecruitPost, on_delete=models.CASCADE)
+
+    def get_absolute_url(self):
+        return f'/recruit/join/{self.pk}'
 
     def get_content_markdown(self):
         return markdown(self.content)

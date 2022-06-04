@@ -5,17 +5,17 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 # url패턴에서 실행하는 함수
-from recruit.models import RecruitPost, Category, Tag
+from recruit.models import RecruitPost, MemberJoin, Category, Tag
 
 # 로그인 방문자 접근
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import CommentForm
 
 
 class PostUpdate(LoginRequiredMixin, UpdateView):
     model = RecruitPost
-    fields = ['title', 'hook_message', 'content', 'head_image', 'category', 'tags']
+    fields = ['title', 'hook_message', 'content', 'head_image', 'due_date', 'category', 'tags']
 
     template_name = "recruit/recruitpost_form_update.html"
 
@@ -28,7 +28,7 @@ class PostUpdate(LoginRequiredMixin, UpdateView):
 
 class PostCreate(LoginRequiredMixin, CreateView):
     model = RecruitPost
-    fields = ['title', 'hook_message', 'content', 'head_image', 'category', 'tags']
+    fields = ['title', 'hook_message', 'content', 'head_image', 'due_date', 'category', 'tags']
 
     def form_valid(self, form):
         current_user = self.request.user
@@ -37,6 +37,32 @@ class PostCreate(LoginRequiredMixin, CreateView):
             return super(PostCreate, self).form_valid(form)
         else:
             return redirect('/recruit')
+
+
+class JoinCreate(LoginRequiredMixin, CreateView):
+    model = MemberJoin
+    fields = ['name', 'phone_number', 'content']
+
+    def form_valid(self, form):
+        current_user = self.request.user
+        if current_user.is_authenticated:
+            form.instance.author = current_user
+            form.instance.recruit_post = RecruitPost.objects.get(pk=self.kwargs['pk'])
+
+            return super(JoinCreate, self).form_valid(form)
+        else:
+            return redirect('/recruit')
+
+
+class JoinDetail(DetailView):
+    model = MemberJoin
+
+    def get_context_data(self, **kwargs):
+        context = super(JoinDetail, self).get_context_data()
+        context['categories'] = Category.objects.all()
+        context['no_category_post_count'] = RecruitPost.objects.filter(category=None).count()
+
+        return context
 
 
 # class based views (CBV)
@@ -48,7 +74,6 @@ class PostList(ListView):
         context = super(PostList, self).get_context_data()
         context['categories'] = Category.objects.all()
         context['no_category_post_count'] = RecruitPost.objects.filter(category=None).count()
-        context['post_list'] = RecruitPost.objects.all()
         return context
 
 
@@ -83,29 +108,44 @@ class CategoryPostList(ListView):
         return context
 
 def show_tag_posts(request, slug):
+    tag = Tag.objects.get(slug=slug)
+    recruitpost_list = tag.recruitpost_set.all()
+
+    context = {
+        'categories': Category.objects.all(),
+        'no_category_post_count': RecruitPost.objects.filter(category=None).count(),
+        'tag': tag,
+        'recruitpost_list': recruitpost_list
+    }
+
+    return render(
+        request,
+        'recruit/recruitpost_list.html',
+        context
+    )
+
+
+def show_search_posts(request, search):
     allTags = Tag.objects.all()
+
     # Tag가 존재하는지 확인
-    temp = False
+    slugs = []
+
     for i in allTags:
-        if i.slug == slug :
-            temp = True
-            break
+        if search in i.slug:
+            slugs.append(i.slug)
 
-    if temp: # Tag가 존재하는 경우
+    recruitpost_list = []
+    for slug in slugs:
         tag = Tag.objects.get(slug=slug)
-        recruitpost_list = tag.recruitpost_set.all()
+        recruitpost_list += tag.recruitpost_set.all()
 
-        context = {
-            'categories': Category.objects.all(),
-            'no_category_post_count': RecruitPost.objects.filter(category=None).count(),
-            'tag': tag,
-            'recruitpost_list': recruitpost_list
-        }
-    else : # Tag가 존재하지 않는 경우
-        context = {
-            'categories': Category.objects.all(),
-            'no_category_post_count': RecruitPost.objects.filter(category=None).count(),
-        }
+    context = {
+        'categories': Category.objects.all(),
+        'no_category_post_count': RecruitPost.objects.filter(category=None).count(),
+        'search': search,
+        'recruitpost_list': recruitpost_list
+    }
 
     return render(
         request,
