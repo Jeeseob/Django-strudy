@@ -13,5 +13,6 @@ urlpatterns =[
     path('post/<int:pk>/addcomment/', views.new_comment),
     path('post/<int:pk>/create_join/', views.JoinCreate.as_view()),
     path('join/<int:pk>', views.JoinDetail.as_view()),
+    path('join/list', views.JoinList.as_view()),
     path('', views.PostList.as_view()),
 ]

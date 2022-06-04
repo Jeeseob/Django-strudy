@@ -8,7 +8,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from recruit.models import RecruitPost, MemberJoin, Category, Tag
 
 # 로그인 방문자 접근
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from .forms import CommentForm
 
@@ -58,12 +58,36 @@ class JoinDetail(DetailView):
     model = MemberJoin
 
     def get_context_data(self, **kwargs):
-        context = super(JoinDetail, self).get_context_data()
-        context['categories'] = Category.objects.all()
-        context['no_category_post_count'] = RecruitPost.objects.filter(category=None).count()
+        if self.request.user.is_authenticated and self.request.user == self.get_object().author \
+                or self.request.user == RecruitPost.objects.get(pk=self.kwargs['pk']).author:
+            context = super(JoinDetail, self).get_context_data()
+            context['categories'] = Category.objects.all()
+            context['no_category_post_count'] = RecruitPost.objects.filter(category=None).count()
 
-        return context
+            return context
+        else:
+            raise PermissionDenied
+            #return redirect('/recruit/post/' + str(self.kwargs['pk']))
 
+
+class JoinList(ListView):
+    model = MemberJoin  # 모델 객체 설정
+    ordering = 'pk'  # 정렬 방식 설정(선착순)
+
+    def get_context_data(self, **kwargs):
+        if self.request.user.is_authenticated:
+            context = super(JoinList, self).get_context_data()
+            context['memberjoin_list'] = MemberJoin.objects.filter(author=self.request.user)
+            # context['recruitpost'] = RecruitPost.objects.get(pk=self.kwargs['pk'])
+
+            context['categories'] = Category.objects.all()
+            context['no_category_post_count'] = RecruitPost.objects.filter(category=None).count()
+
+            return context
+
+        else:
+            raise PermissionDenied
+            # return redirect('/recruit/post/'+self.kwargs['pk'])
 
 # class based views (CBV)
 class PostList(ListView):
