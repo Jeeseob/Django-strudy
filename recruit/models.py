@@ -41,8 +41,7 @@ class RecruitPost(models.Model):
     content = MarkdownxField()  # 내용
     hook_message = models.TextField(blank=True)  # 미리보기 내용
 
-    numberOfMembers = models.IntegerField  # 모집중인 인원
-    tempNumberOfMembers = models.IntegerField  # 현재 모집된 인원
+    number_of_member = models.IntegerField()  # 모집중인 인원
 
     due_date = models.DateField()  # 마감일
 

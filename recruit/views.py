@@ -8,14 +8,14 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from recruit.models import RecruitPost, MemberJoin, Category, Tag
 
 # 로그인 방문자 접근
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import CommentForm
 
 
 class PostUpdate(LoginRequiredMixin, UpdateView):
     model = RecruitPost
-    fields = ['title', 'hook_message', 'content', 'head_image', 'due_date', 'category', 'tags']
+    fields = ['title', 'number_of_member', 'hook_message', 'content', 'head_image', 'due_date', 'category', 'tags']
 
     template_name = "recruit/recruitpost_form_update.html"
 
@@ -28,7 +28,7 @@ class PostUpdate(LoginRequiredMixin, UpdateView):
 
 class PostCreate(LoginRequiredMixin, CreateView):
     model = RecruitPost
-    fields = ['title', 'hook_message', 'content', 'head_image', 'due_date', 'category', 'tags']
+    fields = ['title', 'number_of_member', 'hook_message', 'content', 'head_image', 'due_date', 'category', 'tags']
 
     def form_valid(self, form):
         current_user = self.request.user
@@ -70,7 +70,7 @@ class JoinDetail(DetailView):
             #return redirect('/recruit/post/' + str(self.kwargs['pk']))
 
 
-class JoinList(ListView):
+class JoinList(LoginRequiredMixin, ListView):
     model = MemberJoin  # 모델 객체 설정
     ordering = 'pk'  # 정렬 방식 설정(선착순)
 
@@ -78,8 +78,7 @@ class JoinList(ListView):
         if self.request.user.is_authenticated:
             context = super(JoinList, self).get_context_data()
             context['memberjoin_list'] = MemberJoin.objects.filter(author=self.request.user)
-            # context['recruitpost'] = RecruitPost.objects.get(pk=self.kwargs['pk'])
-
+            context['recruitpost'] = RecruitPost.objects.get(pk=self.kwargs['pk'])
             context['categories'] = Category.objects.all()
             context['no_category_post_count'] = RecruitPost.objects.filter(category=None).count()
 
@@ -88,6 +87,51 @@ class JoinList(ListView):
         else:
             raise PermissionDenied
             # return redirect('/recruit/post/'+self.kwargs['pk'])
+
+
+class MyPageRecruit(LoginRequiredMixin, ListView):
+    model = RecruitPost  # 모델 객체 설정
+    ordering = 'pk'  # 정렬 방식 설정(선착순)
+
+    def get_context_data(self, **kwargs):
+        if self.request.user.is_authenticated:
+            context = super(MyPageRecruit, self).get_context_data()
+            context['recruitpost_list'] = RecruitPost.objects.filter(author=self.request.user)
+            context['categories'] = Category.objects.all()
+            context['no_category_post_count'] = RecruitPost.objects.filter(category=None).count()
+
+            return context
+
+        else:
+            raise PermissionDenied
+
+class MyPageJoin(LoginRequiredMixin, ListView):
+    model = MemberJoin  # 모델 객체 설정
+    ordering = 'pk'  # 정렬 방식 설정(선착순)
+
+    def get_context_data(self, **kwargs):
+        if self.request.user.is_authenticated:
+            context = super(MyPageJoin, self).get_context_data()
+            context['memberjoin_list'] = MemberJoin.objects.filter(author=self.request.user)
+            context['categories'] = Category.objects.all()
+            context['no_category_post_count'] = RecruitPost.objects.filter(category=None).count()
+
+            return context
+
+        else:
+            raise PermissionDenied
+
+
+def my_page(request):
+    context = {
+        'categories': Category.objects.all(),
+        'no_category_post_count': RecruitPost.objects.filter(category=None).count(),
+    }
+    return render(
+        request,
+        'recruit/mypage.html',
+        context
+    )
 
 # class based views (CBV)
 class PostList(ListView):

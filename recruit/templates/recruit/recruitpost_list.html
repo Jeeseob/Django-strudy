@@ -35,7 +35,7 @@
             <img class="card-img-top" src="https://picsum.photos/id/{{ recruitpost.pk }}/800/200" alt="Card image cap"/>
         {% endif %}
         <div class="card-body">
-            <h2 class="card-title">{{ recruitpost.title}}</h2>
+            <h2 class="card-title">{{ recruitpost.title}} &nbsp;&nbsp;&nbsp; [모집인원 : {{recruitpost.number_of_member}}]</h2>
             {% if post.hook_message %}
                 <p class="card-text">{{ recruitpost.hook_message }}</p>
             {% else %}
