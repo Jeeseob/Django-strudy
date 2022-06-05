@@ -21,5 +21,6 @@ urlpatterns =[
     path('mypage/', views.my_page),
     path('mypage/recruit/', views.MyPageRecruit.as_view()),
     path('mypage/join/', views.MyPageJoin.as_view()),
+    path('mypage/join/<int:pk>/', views.PostJoinList.as_view()),
     path('', views.PostList.as_view()),
 ]

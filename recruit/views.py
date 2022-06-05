@@ -86,7 +86,26 @@ class JoinList(LoginRequiredMixin, ListView):
 
         else:
             raise PermissionDenied
-            # return redirect('/recruit/post/'+self.kwargs['pk'])
+
+
+class PostJoinList(LoginRequiredMixin, ListView):
+    model = MemberJoin  # 모델 객체 설정
+    ordering = 'pk'  # 정렬 방식 설정(선착순)
+
+    def get_context_data(self, **kwargs):
+        if self.request.user.is_authenticated:
+            temp_post = RecruitPost.objects.get(pk=self.kwargs['pk'])
+            if self.request.user == temp_post.author:
+                context = super(PostJoinList, self).get_context_data()
+                context['memberjoin_list'] = MemberJoin.objects.filter(recruit_post=temp_post)
+                context['recruitpost'] = temp_post
+                context['categories'] = Category.objects.all()
+                context['no_category_post_count'] = RecruitPost.objects.filter(category=None).count()
+                return context
+
+        raise PermissionDenied
+
+
 
 
 class MyPageRecruit(LoginRequiredMixin, ListView):

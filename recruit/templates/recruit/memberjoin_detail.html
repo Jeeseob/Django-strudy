@@ -6,22 +6,21 @@
 
 {% block main_area %}
       <div class="col-lg-12">
-
         <!-- Title -->
         <h1 class="mt-4">{{ memberjoin.author }}</h1>
+        <hr/>
           {% if user.is_authenticated %}
-              {% if user == recruitpost.author %}
-                  <a class="btn btn-info btn-sm float-right" href="/recruit/update_join/{{ memberjoin.pk }}/" role="button">
+              {% if user == memberjoin.author %}
+                  <a style="margin-right: 10px" type="button" class="btn btn-info btn-sm float-right" href="/recruit/update_join/{{ memberjoin.pk }}/" >
                       <i class="fas fa-pen"></i>
-                      &nbsp;&nbsp;Edit Post
+                      &nbsp;&nbsp;Edit join
                   </a>
               {% endif %}
           {% endif %}
-        <hr/>
         <!-- Author -->
         <div>
             <div style="float: left">이름 : {{ memberjoin.name }}</div>
-            <div style="float: right">전화번호 : {{ memberjoin.phone_number }}</div>
+            <div style="float: right; margin-right: 20px;">전화번호 : {{ memberjoin.phone_number }}</div>
                     <br/>
         </div>
 
