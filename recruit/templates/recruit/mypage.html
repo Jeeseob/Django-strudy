@@ -8,14 +8,14 @@
     <div>
         <hr/>
           {% if user.is_authenticated %}
-              <a class="btn btn-info btn-sm float-right" href="/recruit/mypage/recruit/" role="button">
-                  <i class="fas fa-pen"></i>
-                  &nbsp;&nbsp;모집 글 목록
+            <div class="d-grid gap-2">
+              <a class="btn btn-primary shadow rounded" href="/recruit/mypage/recruit/" role="button">
+                  &nbsp;&nbsp;작성 글 목록
               </a>
-              <a class="btn btn-info btn-sm float-right" href="/recruit/mypage/join/" role="button">
-                  <i class="fas fa-pen"></i>
-                  &nbsp;&nbsp;가입 신청 목록
+              <a class="btn btn-primary shadow rounded" href="/recruit/mypage/join/" role="button">
+                  &nbsp;&nbsp;스터디 신청 목록
               </a>
+              </div>
           {% endif %}
       </div>
 

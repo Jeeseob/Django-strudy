@@ -12,6 +12,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import CommentForm
 
+from datetime import datetime
+
 
 class PostUpdate(LoginRequiredMixin, UpdateView):
     model = RecruitPost
@@ -193,6 +195,32 @@ class CategoryPostList(ListView):
         context['no_category_post_count'] = RecruitPost.objects.filter(category=None).count()
 
         return context
+
+
+class FinishedPostList(ListView):
+    model = RecruitPost
+    ordering = '-pk'
+
+    def get_context_data(self, **kwargs):
+        context = super(FinishedPostList, self).get_context_data()
+        context['recruitpost_list'] = RecruitPost.objects.filter(due_date__lt=datetime.now())
+        context['categories'] = Category.objects.all()
+        context['no_category_post_count'] = RecruitPost.objects.filter(category=None).count()
+
+        return context
+
+class RecruitingPostList(ListView):
+    model = RecruitPost
+    ordering = '-pk'
+
+    def get_context_data(self, **kwargs):
+        context = super(RecruitingPostList, self).get_context_data()
+        context['recruitpost_list'] = RecruitPost.objects.filter(due_date__gte=datetime.now())
+        context['categories'] = Category.objects.all()
+        context['no_category_post_count'] = RecruitPost.objects.filter(category=None).count()
+
+        return context
+
 
 def show_tag_posts(request, slug):
     tag = Tag.objects.get(slug=slug)

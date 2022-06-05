@@ -6,7 +6,7 @@ from recruit.models import Category
 def landing(request):
     return render(
         request,
-        'landing.html',
+        'index.html',
         {
             'recent_posts': RecruitPost.objects.order_by('-pk')[:3],
             'categories': Category.objects.all(),
