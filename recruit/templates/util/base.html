@@ -5,17 +5,17 @@
     {% block title %}
     {% endblock %}
         <link rel="stylesheet" href="{% static 'recruit/bootstrap/bootstrap.min.css' %}" media="screen">
+        <script>
+            function search() {
+                var text = document.getElementById("search").value;
+                location.href = "/recruit/search/" + text;
+            }
+        </script>
 
     <script src="https://kit.fontawesome.com/726bbd6862.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
-<script>
-    function search() {
-        var text = document.getElementById("search").value;
-        location.href = "/recruit/search/" + text;
-    }
-</script>
     {% include 'util/navbar.html' %}
     <!-- Modal -->
     <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="logInModalLabel"

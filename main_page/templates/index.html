@@ -1,19 +1,10 @@
+{% load static %}
 <html>
 {% block title %}
-<title>recruit - {{ recruitpost.title }}</title>
+<title>Recruit-main</title>
 {% endblock %}
 
 {% include 'util/navbar.html' %}
-
-	<head>
-		<title>Tessellate by HTML5 UP</title>
-		<meta charset="utf-8" />
-        <link rel="stylesheet" href="/static/recruit/bootstrap/bootstrap.min.css" media="screen">
-{#        <script src="https://kit.fontawesome.com/726bbd6862.js" crossorigin="anonymous"></script>#}
-        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-        <link rel="stylesheet" href="/static/assets/css/main.css" type="text/css" media="screen" >
-
-	</head>
 	<body class="is-preload">
 		<!-- First -->
 			<section id="first" class="main">
@@ -61,5 +52,11 @@
 				</div>
 			</section>
         {% include 'util/footer.html' %}
-	</body>
+    </body>
+<head>
+    <title>Tessellate by HTML5 UP</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="{% static 'assets/css/main.css' %}" media="screen">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+</head>
 </html>
